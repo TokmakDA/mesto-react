@@ -7,7 +7,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
   const [isUserDescription, setUserDescription] = useState('');
   const [isUserAvatar, setUserAvatar] = useState('');
   const [isCards, setCards] = useState([]);
-  const [isMyId, setMyId] = useState();
+  const [isMyId, setMyId] = useState('');
 
   useEffect(() => {
     api
@@ -38,35 +38,36 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
           <button
             className="profile__avatar-edit-buttom"
             onClick={() => onEditAvatar()}
-            type="button"></button>
+            type="button"
+          ></button>
         </div>
         <div className="profile__info">
           <h1 className="profile__name">{isUserName}</h1>
           <button
             className="profile__edit-button"
             onClick={() => onEditProfile()}
-            type="button"></button>
+            type="button"
+          ></button>
           <p className="profile__job">{isUserDescription}</p>
         </div>
         <button
           className="profile__add-button"
           onClick={() => onAddPlace()}
-          type="button"></button>
+          type="button"
+        ></button>
       </section>
 
       {/* <!-- Cards --> */}
       <section className="content__section">
         <ul className="cards">
-
           {isCards.map((card) => (
             <Card
               key={card._id}
-              {...card}
+              card={card}
               myId={isMyId}
               onCardClick={onCardClick}
             />
           ))}
-
         </ul>
       </section>
     </main>
