@@ -27,7 +27,7 @@ function App() {
     setEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
-    setSelectedCard(false);
+    setSelectedCard(null);
   }
 
   function handleCardClick(card) {
@@ -127,7 +127,7 @@ function App() {
             id="place-image-link"
             type="url"
             placeholder="Ссылка на картинку"
-            value=""
+            defaultValue=""
             name="placeImageLink"
             required
           />
