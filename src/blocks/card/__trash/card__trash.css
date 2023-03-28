@@ -9,8 +9,8 @@
   position: absolute;
   top: 20px;
   right: 20px;
-  visibility: hidden;
-  opacity: 0;
+  opacity: 1;
+  transition: 0.5s;
 }
 
 .card__trash:hover {

@@ -6,7 +6,7 @@ class Api {
 
   //Загрузка информации о пользователе с сервера
   // запрос GET
-  getInfoUserMe() {
+  getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'GET',
       headers: this._headers,
@@ -104,7 +104,7 @@ class Api {
 
   // закгружаем первичную информацию с сервера
   getInitialsData() {
-    return Promise.all([this.getInfoUserMe(), this.getInitialCards()]);
+    return Promise.all([this.getUserInfo(), this.getInitialCards()]);
   }
 }
 
