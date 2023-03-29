@@ -9,6 +9,7 @@ import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import api from '../utils/Api';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 
 function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -44,11 +45,24 @@ function App() {
     setEditProfilePopupOpen(true);
   }
 
-  // сохраняем введенные данные пользователя в апи
+  // сохраняем введенные данные пользователя в Api
   function handleUpdateUser(data) {
     console.log(data);
     api
-      .patchUserInfo(data.isName, data.isDescription)
+      .patchUserInfo(data.name, data.about)
+      .then((res) => {
+        console.log(res);
+        setCurrentUser(res);
+      })
+      .then(() => closeAllPopups())
+      .catch((err) => console.log(err));
+  }
+
+  // сохраняем Аватар пользователя в Api
+  function handleUpdateAvatar(LinkAvatar) {
+    console.log(LinkAvatar);
+    api
+      .patchUserAvatar(LinkAvatar)
       .then((res) => {
         console.log(res);
         setCurrentUser(res);
@@ -100,6 +114,7 @@ function App() {
         .catch((err) => console.log(err));
     }
   }
+
   // обработчик удаления карточки
   function handleCardDelete(card) {
     api
@@ -128,34 +143,16 @@ function App() {
 
         <Footer />
 
-        <PopupWithForm
-          name={'profile-avatar-form'}
-          title={'Обновить аватар'}
-          button={'Сохранить'}
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
-          onClose={(data) => closeAllPopups(data)}
-        >
-          <fieldset className="popup__inputs">
-            <input
-              className="popup__input"
-              id="profile-avatar-link"
-              type="url"
-              placeholder="Введите ссылку на аватарку"
-              defaultValue=""
-              name="profileAvatarLink"
-              required
-            />
-            <span
-              className="popup__error"
-              id="profile-avatar-link-error"
-            ></span>
-          </fieldset>
-        </PopupWithForm>
+          onClose={closeAllPopups}
+          onUpdateAvatar={() => handleUpdateAvatar()}
+        />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-          onUpdateUser={(data)=>handleUpdateUser(data)}
+          onUpdateUser={(data) => handleUpdateUser(data)}
         />
 
         <PopupWithForm
