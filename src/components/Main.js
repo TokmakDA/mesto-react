@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import api from '../utils/Api';
+// import api from '../utils/Api';
 import Card from './Card';
 
 function Main({
@@ -10,6 +10,7 @@ function Main({
   onCardClick,
   onCardLike,
   isCards,
+  onCardDelete
 }) {
   // const [isUserName, setUserName] = useState('');
   // const [isUserDescription, setUserDescription] = useState('');
@@ -83,6 +84,7 @@ function Main({
               card={card}
               onCardClick={onCardClick}
               onCardLike={onCardLike}
+              onCardDelete={onCardDelete}
             />
           ))}
         </ul>

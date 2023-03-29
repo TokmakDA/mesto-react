@@ -56,7 +56,7 @@ function App() {
   function handleCardClick(card) {
     setSelectedCard(card);
   }
-
+  //обработчик лайков и дизлайков
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -68,6 +68,8 @@ function App() {
           setCards((state) =>
             state.map((c) => (c._id === card._id ? newCard : c))
           );
+          console.log(`Лайкнул ${card._id}`);
+          console.log(newCard);
         })
         .catch((err) => console.log(err));
     } else {
@@ -77,9 +79,21 @@ function App() {
           setCards((state) =>
             state.map((c) => (c._id === card._id ? newCard : c))
           );
+          console.log(`Лайк снят ${card._id}`);
+          console.log(newCard);
         })
         .catch((err) => console.log(err));
     }
+  }
+  //обработчик удаления карточки
+  function handleCardDelete(card) {
+    api
+      .deleteCard(card._id)
+      .then((res) => {
+        setCards((state) => state.filter((c) => c._id !== card._id));
+        console.log(res.message);
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -94,6 +108,7 @@ function App() {
           onCardClick={handleCardClick}
           onCardLike={(card) => handleCardLike(card)}
           isCards={isCards}
+          onCardDelete={(card) => handleCardDelete(card)}
         />
 
         <Footer />
