@@ -4,12 +4,13 @@ import '../index.css';
 import Header from './Header';
 import Footer from './Footer';
 import Main from './Main';
-import PopupWithForm from './PopupWithForm';
+// import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import api from '../utils/Api';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 
 function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -66,6 +67,17 @@ function App() {
       .then((res) => {
         console.log(res);
         setCurrentUser(res);
+      })
+      .then(() => closeAllPopups())
+      .catch((err) => console.log(err));
+  }
+
+  function handleAddPlaceSubmit(data) {
+    console.log(`покажи что пришло в App ${data}`);
+    api
+      .postNewCard(data)
+      .then((res) => {
+        console.log(res)
       })
       .then(() => closeAllPopups())
       .catch((err) => console.log(err));
@@ -146,7 +158,7 @@ function App() {
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
-          onUpdateAvatar={() => handleUpdateAvatar()}
+          onUpdateAvatar={(data) => handleUpdateAvatar(data)}
         />
 
         <EditProfilePopup
@@ -155,38 +167,11 @@ function App() {
           onUpdateUser={(data) => handleUpdateUser(data)}
         />
 
-        <PopupWithForm
-          name={'card-form'}
-          title={'Новое место'}
-          button={'Сохранить'}
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
-          onClose={() => closeAllPopups()}
-        >
-          <fieldset className="popup__inputs">
-            <input
-              className="popup__input"
-              id="place-image-name"
-              type="text"
-              placeholder="Название"
-              defaultValue=""
-              name="placeImageName"
-              minLength="2"
-              maxLength="40"
-              required
-            />
-            <span className="popup__error" id="place-image-name-error"></span>
-            <input
-              className="popup__input"
-              id="place-image-link"
-              type="url"
-              placeholder="Ссылка на картинку"
-              defaultValue=""
-              name="placeImageLink"
-              required
-            />
-            <span className="popup__error" id="place-image-link-error"></span>
-          </fieldset>
-        </PopupWithForm>
+          onClose={closeAllPopups}
+          onAddPlace={(data) => handleAddPlaceSubmit(data)}
+        />
 
         <ImagePopup
           {...isSelectedCard}

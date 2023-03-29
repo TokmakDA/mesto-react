@@ -3,13 +3,15 @@ import PopupWithForm from './PopupWithForm';
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const avatarRef = useRef();
+  const value = ''
 
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
+    console.log(`покажи реф ${avatarRef.current.value}`)
 
     // Передаём значения управляемых компонентов во внешний обработчик
-    onUpdateAvatar(avatarRef.value);
+    onUpdateAvatar(avatarRef.current.value);
   }
 
   return (
@@ -27,7 +29,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
           id="profile-avatar-link"
           type="url"
           placeholder="Введите ссылку на аватарку"
-          defaultValue=""
+          defaultValue={value}
           ref={avatarRef}
           name="profileAvatarLink"
           required
