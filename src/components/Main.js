@@ -19,7 +19,6 @@ function Main({
   // const [isMyId, setMyId] = useState('');
 
   const currentUser = useContext(CurrentUserContext);
-
   // useEffect(() => {
   //   api
   //     .getInitialsData()

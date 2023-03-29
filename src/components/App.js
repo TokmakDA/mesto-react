@@ -8,6 +8,7 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import api from '../utils/Api';
+import EditProfilePopup from './EditProfilePopup';
 
 function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -42,6 +43,20 @@ function App() {
   function handleEditProfileClick() {
     setEditProfilePopupOpen(true);
   }
+
+  // сохраняем введенные данные пользователя в апи
+  function handleUpdateUser(data) {
+    console.log(data);
+    api
+      .patchUserInfo(data.isName, data.isDescription)
+      .then((res) => {
+        console.log(res);
+        setCurrentUser(res);
+      })
+      .then(() => closeAllPopups())
+      .catch((err) => console.log(err));
+  }
+
   function handleAddPlaceClick() {
     setAddPlacePopupOpen(true);
   }
@@ -56,7 +71,7 @@ function App() {
   function handleCardClick(card) {
     setSelectedCard(card);
   }
-  //обработчик лайков и дизлайков
+  // обработчик лайков и дизлайков
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -85,7 +100,7 @@ function App() {
         .catch((err) => console.log(err));
     }
   }
-  //обработчик удаления карточки
+  // обработчик удаления карточки
   function handleCardDelete(card) {
     api
       .deleteCard(card._id)
@@ -118,7 +133,7 @@ function App() {
           title={'Обновить аватар'}
           button={'Сохранить'}
           isOpen={isEditAvatarPopupOpen}
-          onClose={() => closeAllPopups()}
+          onClose={(data) => closeAllPopups(data)}
         >
           <fieldset className="popup__inputs">
             <input
@@ -137,39 +152,11 @@ function App() {
           </fieldset>
         </PopupWithForm>
 
-        <PopupWithForm
-          name={'profile-form'}
-          title={'Редактировать профиль'}
-          button={'Сохранить'}
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-        >
-          <fieldset className="popup__inputs">
-            <input
-              className="popup__input"
-              id="profile-name"
-              placeholder="Имя"
-              defaultValue="Жак-Ив Кусто"
-              name="profileName"
-              minLength="2"
-              maxLength="40"
-              required
-            />
-            <span className="popup__error" id="profile-name-error"></span>
-            <input
-              className="popup__input"
-              id="profile-job"
-              type="text"
-              placeholder="О себе"
-              defaultValue="Исследователь океана"
-              name="profileJob"
-              minLength="2"
-              maxLength="200"
-              required
-            />
-            <span className="popup__error" id="profile-job-error"></span>
-          </fieldset>
-        </PopupWithForm>
+          onUpdateUser={(data)=>handleUpdateUser(data)}
+        />
 
         <PopupWithForm
           name={'card-form'}
