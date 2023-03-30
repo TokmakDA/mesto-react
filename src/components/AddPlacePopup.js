@@ -7,10 +7,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-    console.log(isValues);
+
     // Передаём значения управляемых компонентов во внешний обработчик
     onAddPlace(isValues);
-
+    
+    // сбрасываем инпуты
     setValues({ ...isValues, name: '', link: '' });
   }
 

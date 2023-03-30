@@ -14,26 +14,22 @@ import AddPlacePopup from './AddPlacePopup';
 import CardDeletePopup from './DeleteCardPopup';
 
 function App() {
+  // Стейты состояния открытия попапов
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isSelectedCard, setSelectedCard] = useState(null);
   const [isCardDeletePopupOpen, setCardDeletePopupOpen] = useState(false);
-
+  // Стейт массива карточек
   const [isCards, setCards] = useState([]);
+  // Стейт карточки для удаления
   const [isCard, SetCard] = useState(null);
-
+  // Стейт данных пользователя
   const [currentUser, setCurrentUser] = useState(null);
-
+  // Стейт ожидания загрузки
   const [isLoading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   api
-  //     .getUserInfo()
-  //     .then((res) => setCurrentUser(res))
-  //     .catch((err) => console.log(err));
-  // }, []);
-
+  // Получаем первичные данные
   useEffect(() => {
     api
       .getInitialsData()
@@ -59,7 +55,7 @@ function App() {
     setCardDeletePopupOpen(true);
   }
 
-  // обработчик открытия картинки карточки
+  // обработчик открытия попапа с картинкой карточки
   function handleCardClick(card) {
     setSelectedCard(card);
   }
@@ -74,14 +70,12 @@ function App() {
   }
 
   // сохраняем введенные данные пользователя в Api
-  function handleUpdateUser(data) {
-    console.log(data);
+  function handleUpdateUser(dataUser) {
     setLoading(true);
     api
-      .patchUserInfo(data.name, data.about)
-      .then((res) => {
-        console.log(res);
-        setCurrentUser(res);
+      .patchUserInfo(dataUser)
+      .then((resUser) => {
+        setCurrentUser(resUser);
       })
       .then(() => {
         closeAllPopups();
@@ -90,30 +84,26 @@ function App() {
       .finally(() => setLoading(false));
   }
 
-  // сохраняем Аватар пользователя в Api
-  function handleUpdateAvatar(LinkAvatar) {
-    console.log(LinkAvatar);
+  // сохраняем новый аватар пользователя в Api
+  function handleUpdateAvatar(linkAvatar) {
     setLoading(true);
     api
-      .patchUserAvatar(LinkAvatar)
-      .then((res) => {
-        console.log(res);
-        setCurrentUser(res);
+      .patchUserAvatar(linkAvatar)
+      .then((resUser) => {
+        setCurrentUser(resUser);
       })
       .then(() => closeAllPopups())
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }
 
-  // добавляем новую карточку
-  function handleAddPlaceSubmit(data) {
-    console.log(`покажи что отправляем в App ${data}`);
+  // добавляем новую карточку 
+  function handleAddPlaceSubmit(dataCard) {
     setLoading(true);
     api
-      .postNewCard(data)
-      .then((res) => {
-        console.log(res);
-        setCards([res, ...isCards]);
+      .postNewCard(dataCard)
+      .then((newCard) => {
+        setCards([newCard, ...isCards]);
       })
       .then(() => closeAllPopups())
       .catch((err) => console.log(err))
@@ -132,8 +122,6 @@ function App() {
           setCards((state) =>
             state.map((c) => (c._id === card._id ? newCard : c))
           );
-          console.log(`Лайкнул ${card._id}`);
-          console.log(newCard);
         })
         .catch((err) => console.log(err));
     } else {
@@ -143,8 +131,6 @@ function App() {
           setCards((state) =>
             state.map((c) => (c._id === card._id ? newCard : c))
           );
-          console.log(`Лайк снят ${card._id}`);
-          console.log(newCard);
         })
         .catch((err) => console.log(err));
     }
@@ -184,21 +170,21 @@ function App() {
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
-          onUpdateAvatar={(data) => handleUpdateAvatar(data)}
+          onUpdateAvatar={(dataUser) => handleUpdateAvatar(dataUser)}
           isLoading={isLoading}
         />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-          onUpdateUser={(data) => handleUpdateUser(data)}
+          onUpdateUser={(dataUser) => handleUpdateUser(dataUser)}
           isLoading={isLoading}
         />
 
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
-          onAddPlace={(data) => handleAddPlaceSubmit(data)}
+          onAddPlace={(dataNewCard) => handleAddPlaceSubmit(dataNewCard)}
           isLoading={isLoading}
         />
 

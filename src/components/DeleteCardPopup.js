@@ -5,8 +5,7 @@ function CardDeletePopup({isOpen, onClose, isLoading, onCardDelete, card}) {
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-    console.log(`покажи Card`);
-    console.log(card);
+
     // Передаём значения во внешний обработчик
     onCardDelete(card);
   }

@@ -7,11 +7,11 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-    console.log(`покажи реф ${avatarRef.current.value}`);
 
     // Передаём значения управляемых компонентов во внешний обработчик
     onUpdateAvatar(avatarRef.current.value);
-
+    
+    // сбрасываем инпуты
     e.target.reset();
   }
 

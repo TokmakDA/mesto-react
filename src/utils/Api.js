@@ -27,13 +27,13 @@ class Api {
   }
 
   // Редактирование профиля (Данные уходят на сервер)
-  patchUserInfo(UserNameNew, UserAboutNew) {
+  patchUserInfo(user) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
       body: JSON.stringify({
-        name: UserNameNew,
-        about: UserAboutNew,
+        name: user.name,
+        about: user.about,
       }),
     }).then((res) =>
       res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
