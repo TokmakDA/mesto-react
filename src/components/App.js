@@ -11,14 +11,17 @@ import api from '../utils/Api';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import CardDeletePopup from './DeleteCardPopup';
 
 function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isSelectedCard, setSelectedCard] = useState(null);
+  const [isCardDeletePopupOpen, setCardDeletePopupOpen] = useState(false);
 
   const [isCards, setCards] = useState([]);
+  const [isCard, SetCard] = useState(null);
 
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -51,6 +54,10 @@ function App() {
   function handleAddPlaceClick() {
     setAddPlacePopupOpen(true);
   }
+  function handleCardDeleteClick(card) {
+    SetCard(card);
+    setCardDeletePopupOpen(true);
+  }
 
   // обработчик открытия картинки карточки
   function handleCardClick(card) {
@@ -63,6 +70,7 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setSelectedCard(null);
+    setCardDeletePopupOpen(false);
   }
 
   // сохраняем введенные данные пользователя в Api
@@ -143,14 +151,17 @@ function App() {
   }
 
   // обработчик удаления карточки
-  function handleCardDelete(card) {
+  function handleCardDeleteSubmit(card) {
+    setLoading(true);
     api
       .deleteCard(card._id)
       .then((res) => {
         setCards((state) => state.filter((c) => c._id !== card._id));
         console.log(res.message);
       })
-      .catch((err) => console.log(err));
+      .then(() => closeAllPopups())
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }
 
   return (
@@ -165,7 +176,7 @@ function App() {
           onAddPlace={() => handleAddPlaceClick()}
           onCardClick={handleCardClick}
           onCardLike={(card) => handleCardLike(card)}
-          onCardDelete={(card) => handleCardDelete(card)}
+          onCardDelete={(card) => handleCardDeleteClick(card)}
         />
 
         <Footer />
@@ -175,7 +186,6 @@ function App() {
           onClose={closeAllPopups}
           onUpdateAvatar={(data) => handleUpdateAvatar(data)}
           isLoading={isLoading}
-
         />
 
         <EditProfilePopup
@@ -195,7 +205,15 @@ function App() {
         <ImagePopup
           {...isSelectedCard}
           isOpen={isSelectedCard}
-          onClose={() => closeAllPopups()}
+          onClose={closeAllPopups}
+        />
+
+        <CardDeletePopup
+          isOpen={isCardDeletePopupOpen}
+          onClose={closeAllPopups}
+          onCardDelete={(data) => handleCardDeleteSubmit(data)}
+          isLoading={isLoading}
+          card={isCard}
         />
       </div>
     </CurrentUserContext.Provider>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Loading from './Loading';
 
 function PopupWithForm({
-  children,
   name,
   title,
   button,
@@ -10,6 +9,7 @@ function PopupWithForm({
   onClose,
   onSubmit,
   isLoading,
+  children,
 }) {
   const [isButton, setButton] = useState(button);
 
@@ -19,7 +19,7 @@ function PopupWithForm({
       isLoading
         ? setButton('Вносим изменения, подождите...')
         : setButton(button),
-    [isLoading]
+    [isLoading, button]
   );
 
   return (
