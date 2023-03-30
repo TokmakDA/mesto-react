@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   const [isValues, setValues] = useState({ name: '', link: '' });
-  
+
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-    console.log(isValues)
+    console.log(isValues);
     // Передаём значения управляемых компонентов во внешний обработчик
     onAddPlace(isValues);
 
-    // setValues({...isValues, name: '', link: ''})
+    setValues({...isValues, name: '', link: ''})
   }
 
   return (
@@ -22,6 +22,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={(e) => handleSubmit(e)}
+      isLoading={isLoading}
     >
       <fieldset className="popup__inputs">
         <input
@@ -30,7 +31,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
           type="text"
           placeholder="Название"
           value={isValues.name}
-          onChange={event => setValues({...isValues, name: event.target.value})}
+          onChange={(e) => setValues({ ...isValues, name: e.target.value })}
           name="placeImageName"
           minLength="2"
           maxLength="40"
@@ -43,7 +44,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
           type="url"
           placeholder="Ссылка на картинку"
           value={isValues.link}
-          onChange={event => setValues({...isValues, link: event.target.value})}
+          onChange={(e) => setValues({ ...isValues, link: e.target.value })}
           name="placeImageLink"
           required
         />

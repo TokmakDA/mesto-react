@@ -22,6 +22,8 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState(null);
 
+  const [isLoading, setLoading] = useState(false);
+
   // useEffect(() => {
   //   api
   //     .getUserInfo()
@@ -66,21 +68,9 @@ function App() {
   // сохраняем введенные данные пользователя в Api
   function handleUpdateUser(data) {
     console.log(data);
+    setLoading(true);
     api
       .patchUserInfo(data.name, data.about)
-      .then((res) => {
-        console.log(res);
-        setCurrentUser(res);
-      })
-      .then(() => closeAllPopups())
-      .catch((err) => console.log(err));
-  }
-
-  // сохраняем Аватар пользователя в Api
-  function handleUpdateAvatar(LinkAvatar) {
-    console.log(LinkAvatar);
-    api
-      .patchUserAvatar(LinkAvatar)
       .then((res) => {
         console.log(res);
         setCurrentUser(res);
@@ -88,11 +78,29 @@ function App() {
       .then(() => {
         closeAllPopups();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }
 
+  // сохраняем Аватар пользователя в Api
+  function handleUpdateAvatar(LinkAvatar) {
+    console.log(LinkAvatar);
+    setLoading(true);
+    api
+      .patchUserAvatar(LinkAvatar)
+      .then((res) => {
+        console.log(res);
+        setCurrentUser(res);
+      })
+      .then(() => closeAllPopups())
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
+  }
+
+  // добавляем новую карточку
   function handleAddPlaceSubmit(data) {
-    console.log(`покажи что пришло в App ${data}`);
+    console.log(`покажи что отправляем в App ${data}`);
+    setLoading(true);
     api
       .postNewCard(data)
       .then((res) => {
@@ -100,7 +108,8 @@ function App() {
         setCards([res, ...isCards]);
       })
       .then(() => closeAllPopups())
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }
 
   // обработчик лайков и дизлайков
@@ -165,18 +174,22 @@ function App() {
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={(data) => handleUpdateAvatar(data)}
+          isLoading={isLoading}
+
         />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={(data) => handleUpdateUser(data)}
+          isLoading={isLoading}
         />
 
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={(data) => handleAddPlaceSubmit(data)}
+          isLoading={isLoading}
         />
 
         <ImagePopup

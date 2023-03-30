@@ -1,17 +1,18 @@
 import React, { useRef } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
   const avatarRef = useRef();
 
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-    console.log(`покажи реф ${avatarRef.current.value}`)
+    console.log(`покажи реф ${avatarRef.current.value}`);
 
     // Передаём значения управляемых компонентов во внешний обработчик
-    onUpdateAvatar(e, avatarRef.current.value);
-    // e.target.reset()
+    onUpdateAvatar(avatarRef.current.value);
+
+    e.target.reset();
   }
 
   return (
@@ -22,6 +23,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={(e) => handleSubmit(e)}
+      isLoading={isLoading}
     >
       <fieldset className="popup__inputs">
         <input

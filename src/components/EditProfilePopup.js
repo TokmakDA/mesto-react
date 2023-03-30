@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import PopupWithForm from './PopupWithForm';
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
   const [isName, setName] = useState('');
   const [isDescription, setDescription] = useState('');
   // Подписка на контекст
@@ -19,9 +19,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     e.preventDefault();
 
     // Передаём значения управляемых компонентов во внешний обработчик
-    onUpdateUser({ 
-      name: isName, 
-      about: isDescription });
+    onUpdateUser({
+      name: isName,
+      about: isDescription,
+    });
   }
 
   return (
@@ -32,6 +33,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={(e) => handleSubmit(e)}
+      isLoading={isLoading}
     >
       <fieldset className="popup__inputs">
         <input
@@ -39,7 +41,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
           id="profile-name"
           placeholder="Имя"
           value={isName}
-          onChange={(e)=>{setName(e.target.value)}}
+          onChange={(e) => setName(e.target.value)}
           name="profileName"
           minLength="2"
           maxLength="40"
@@ -52,7 +54,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
           type="text"
           placeholder="О себе"
           value={isDescription}
-          onChange={(e)=>{setDescription(e.target.value)}}
+          onChange={(e) => setDescription(e.target.value)}
           name="profileJob"
           minLength="2"
           maxLength="200"
