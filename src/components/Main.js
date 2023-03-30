@@ -4,13 +4,13 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Card from './Card';
 
 function Main({
+  isCards,
   onEditProfile,
   onAddPlace,
   onEditAvatar,
   onCardClick,
   onCardLike,
-  isCards,
-  onCardDelete
+  onCardDelete,
 }) {
   // const [isUserName, setUserName] = useState('');
   // const [isUserDescription, setUserDescription] = useState('');

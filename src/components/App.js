@@ -39,11 +39,28 @@ function App() {
       .catch((err) => console.log(err));
   }, []);
 
+  // Обработчики открытия попапов
   function handleEditAvatarClick() {
     setEditAvatarPopupOpen(true);
   }
   function handleEditProfileClick() {
     setEditProfilePopupOpen(true);
+  }
+  function handleAddPlaceClick() {
+    setAddPlacePopupOpen(true);
+  }
+
+  // обработчик открытия картинки карточки
+  function handleCardClick(card) {
+    setSelectedCard(card);
+  }
+
+  // Отбработчик закрытия попапов
+  function closeAllPopups() {
+    setEditAvatarPopupOpen(false);
+    setEditProfilePopupOpen(false);
+    setAddPlacePopupOpen(false);
+    setSelectedCard(null);
   }
 
   // сохраняем введенные данные пользователя в Api
@@ -72,31 +89,19 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+
   function handleAddPlaceSubmit(data) {
     console.log(`покажи что пришло в App ${data}`);
     api
       .postNewCard(data)
       .then((res) => {
-        console.log(res)
+        console.log(res);
+        setCards([res, ...isCards])
       })
       .then(() => closeAllPopups())
       .catch((err) => console.log(err));
   }
 
-  function handleAddPlaceClick() {
-    setAddPlacePopupOpen(true);
-  }
-
-  function closeAllPopups() {
-    setEditAvatarPopupOpen(false);
-    setEditProfilePopupOpen(false);
-    setAddPlacePopupOpen(false);
-    setSelectedCard(null);
-  }
-
-  function handleCardClick(card) {
-    setSelectedCard(card);
-  }
   // обработчик лайков и дизлайков
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -144,12 +149,12 @@ function App() {
         <Header />
 
         <Main
+          isCards={isCards}
           onEditAvatar={() => handleEditAvatarClick()}
           onEditProfile={() => handleEditProfileClick()}
           onAddPlace={() => handleAddPlaceClick()}
           onCardClick={handleCardClick}
           onCardLike={(card) => handleCardLike(card)}
-          isCards={isCards}
           onCardDelete={(card) => handleCardDelete(card)}
         />
 
