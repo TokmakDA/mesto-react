@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
-  const [isCard, setCard] = useState({ name: '', link: '' });
+  const [isValues, setValues] = useState({ name: '', link: '' });
   
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-    console.log(isCard)
+    console.log(isValues)
     // Передаём значения управляемых компонентов во внешний обработчик
-    onAddPlace(isCard);
+    onAddPlace(isValues);
+
+    // setValues({...isValues, name: '', link: ''})
   }
 
   return (
@@ -27,8 +29,8 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
           id="place-image-name"
           type="text"
           placeholder="Название"
-          defaultValue=""
-          onChange={event => setCard({...isCard, name: event.target.value})}
+          value={isValues.name}
+          onChange={event => setValues({...isValues, name: event.target.value})}
           name="placeImageName"
           minLength="2"
           maxLength="40"
@@ -40,8 +42,8 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
           id="place-image-link"
           type="url"
           placeholder="Ссылка на картинку"
-          defaultValue=""
-          onChange={event => setCard({...isCard, link: event.target.value})}
+          value={isValues.link}
+          onChange={event => setValues({...isValues, link: event.target.value})}
           name="placeImageLink"
           required
         />

@@ -47,6 +47,7 @@
 @import url(./blocks/popup/__spinner/popup__spinner.css);
 @import url(./blocks/popup/__spinner/_visible/popup__spinner_visible.css);
 @import url(./blocks/popup/_profile-form/popup_profile-form.css);
+@import url(./blocks/popup/_profile-avatar-form/popup_profile-avatar-form.css);
 @import url(./blocks/popup/_card-form/popup_card-form.css);
 @import url(./blocks/popup/_card-image/popup_card-image.css);
 @import url(./blocks/popup/_is-opened/popup_is-opened.css);

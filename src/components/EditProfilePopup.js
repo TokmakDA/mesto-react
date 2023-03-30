@@ -31,7 +31,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       button={'Сохранить'}
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={(e) => handleSubmit(e, isName, isDescription)}
+      onSubmit={(e) => handleSubmit(e)}
     >
       <fieldset className="popup__inputs">
         <input

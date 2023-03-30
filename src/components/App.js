@@ -85,10 +85,11 @@ function App() {
         console.log(res);
         setCurrentUser(res);
       })
-      .then(() => closeAllPopups())
+      .then(() => {
+        closeAllPopups();
+      })
       .catch((err) => console.log(err));
   }
-
 
   function handleAddPlaceSubmit(data) {
     console.log(`покажи что пришло в App ${data}`);
@@ -96,7 +97,7 @@ function App() {
       .postNewCard(data)
       .then((res) => {
         console.log(res);
-        setCards([res, ...isCards])
+        setCards([res, ...isCards]);
       })
       .then(() => closeAllPopups())
       .catch((err) => console.log(err));
