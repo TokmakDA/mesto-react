@@ -1,19 +1,19 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
   const avatarRef = useRef();
-
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
 
     // Передаём значения управляемых компонентов во внешний обработчик
     onUpdateAvatar(avatarRef.current.value);
-    
-    // сбрасываем инпуты
-    e.target.reset();
   }
+  useEffect(() => {
+    // сбрасываем инпуты
+    avatarRef.current.value =''
+  }, [isOpen]);
 
   return (
     <PopupWithForm
@@ -31,8 +31,8 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
           id="profile-avatar-link"
           type="url"
           placeholder="Введите ссылку на аватарку"
-          defaultValue=""
-          ref={avatarRef}
+          defaultValue=''
+          ref={avatarRef} // отказался бы от рефа тут, но он тут по заданию
           name="profileAvatarLink"
           required
         />

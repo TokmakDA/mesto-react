@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
-  const [isValues, setValues] = useState({ name: '', link: '' });
+  const [values, setValues] = useState({ name: '', link: '' });
 
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
 
     // Передаём значения управляемых компонентов во внешний обработчик
-    onAddPlace(isValues);
-    
-    // сбрасываем инпуты
-    setValues({ ...isValues, name: '', link: '' });
+    onAddPlace(values);
+
   }
+
+  useEffect(()=>{
+    // сбрасываем инпуты
+    setValues({ ...values, name: '', link: '' });
+  }, [isOpen])
+
 
   return (
     <PopupWithForm
@@ -31,11 +35,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
           id="place-image-name"
           type="text"
           placeholder="Название"
-          value={isValues.name}
-          onChange={(e) => setValues({ ...isValues, name: e.target.value })}
+          value={values.name}
+          onChange={(e) => setValues({ ...values, name: e.target.value })}
           name="placeImageName"
           minLength="2"
-          maxLength="40"
+          maxLength="30"
           required
         />
         <span className="popup__error" id="place-image-name-error"></span>
@@ -44,8 +48,8 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
           id="place-image-link"
           type="url"
           placeholder="Ссылка на картинку"
-          value={isValues.link}
-          onChange={(e) => setValues({ ...isValues, link: e.target.value })}
+          value={values.link}
+          onChange={(e) => setValues({ ...values, link: e.target.value })}
           name="placeImageLink"
           required
         />

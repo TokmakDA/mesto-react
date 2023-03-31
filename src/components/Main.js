@@ -4,7 +4,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Card from './Card';
 
 function Main({
-  isCards,
+  cards,
   onEditProfile,
   onAddPlace,
   onEditAvatar,
@@ -49,7 +49,7 @@ function Main({
       {/* <!-- Cards --> */}
       <section className="content__section">
         <ul className="cards">
-          {isCards.map((card) => (
+          {cards.map((card) => (
             <Card
               key={card._id}
               card={card}

@@ -4,15 +4,17 @@ class Api {
     this._headers = options.headers;
   }
 
+  //, ${res.errors.massage}
+  _checkResponse = (res) =>
+    res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
+
   //Загрузка информации о пользователе с сервера
   // запрос GET
   getUserInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'GET',
       headers: this._headers,
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+    }).then(this._checkResponse);
   }
 
   // Загрузка карточек с сервера
@@ -21,9 +23,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards`, {
       method: 'GET',
       headers: this._headers,
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+    }).then(this._checkResponse);
   }
 
   // Редактирование профиля (Данные уходят на сервер)
@@ -35,9 +35,7 @@ class Api {
         name: user.name,
         about: user.about,
       }),
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+    }).then(this._checkResponse);
   }
 
   // Добавление новой карточки. полученный ответ нужно отрендерить на страницу
@@ -50,9 +48,7 @@ class Api {
         name: `${card.name}`,
         link: `${card.link}`,
       }),
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+    }).then(this._checkResponse);
   }
 
   // Удаление карточки
@@ -61,9 +57,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards/${cardID}`, {
       method: 'DELETE',
       headers: this._headers,
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+    }).then(this._checkResponse);
   }
 
   // Постановка  лайка
@@ -72,9 +66,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards/${cardID}/likes`, {
       method: 'PUT',
       headers: this._headers,
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+    }).then(this._checkResponse);
   }
 
   // Cнятие лайка
@@ -83,9 +75,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards/${cardID}/likes`, {
       method: 'DELETE',
       headers: this._headers,
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+    }).then(this._checkResponse);
   }
 
   // Обновление аватара пользователя (Данные уходят на сервер)
@@ -97,9 +87,7 @@ class Api {
       body: JSON.stringify({
         avatar: LinkAvatar,
       }),
-    }).then((res) =>
-      res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`)
-    );
+    }).then(this._checkResponse);
   }
 
   // закгружаем первичную информацию с сервера
@@ -113,7 +101,7 @@ const api = new Api({
   headers: {
     authorization: '0fac7cb1-5a97-4e4b-9bc6-bcf4a65057a3',
     'Content-Type': 'application/json',
-  }
+  },
 });
 
 export default api;

@@ -11,7 +11,7 @@ function PopupWithForm({
   isLoading,
   children,
 }) {
-  const [isButton, setButton] = useState(button);
+  const [currentButton, setButton] = useState(button);
 
   // Меняем кнопку на попапе
   useEffect(
@@ -37,12 +37,11 @@ function PopupWithForm({
           {/* Инпуты */}
           {children}
 
-          <input
+          <button
             className="popup__button"
             type="submit"
-            value={isButton}
             required
-          />
+          >{currentButton}</button>
         </form>
       </div>
     </div>

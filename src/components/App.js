@@ -18,12 +18,12 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
-  const [isSelectedCard, setSelectedCard] = useState(null);
+  const [isImagePopupOpen, setImagePopupOpen] = useState(false);
   const [isCardDeletePopupOpen, setCardDeletePopupOpen] = useState(false);
   // Стейт массива карточек
-  const [isCards, setCards] = useState([]);
+  const [currentCards, setCurrentCards] = useState([]);
   // Стейт карточки для удаления
-  const [isCard, SetCard] = useState(null);
+  const [currentCard, setCurrentCard] = useState(null);
   // Стейт данных пользователя
   const [currentUser, setCurrentUser] = useState(null);
   // Стейт ожидания загрузки
@@ -35,7 +35,7 @@ function App() {
       .getInitialsData()
       .then(([UserInfo, initialCards]) => {
         setCurrentUser(UserInfo);
-        setCards(initialCards);
+        setCurrentCards(initialCards);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -51,13 +51,19 @@ function App() {
     setAddPlacePopupOpen(true);
   }
   function handleCardDeleteClick(card) {
-    SetCard(card);
+    setCurrentCard(card);
     setCardDeletePopupOpen(true);
   }
 
   // обработчик открытия попапа с картинкой карточки
   function handleCardClick(card) {
-    setSelectedCard(card);
+    setCurrentCard(card);
+    setImagePopupOpen(true);
+  }
+  // обработчик открытия попапа с картинкой карточки
+  function closseImagepopup() {
+    setCurrentCard(null);
+    setImagePopupOpen(false);
   }
 
   // Отбработчик закрытия попапов
@@ -65,7 +71,8 @@ function App() {
     setEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
-    setSelectedCard(null);
+    // setSelectedCard(null);
+    closseImagepopup();
     setCardDeletePopupOpen(false);
   }
 
@@ -97,13 +104,13 @@ function App() {
       .finally(() => setLoading(false));
   }
 
-  // добавляем новую карточку 
+  // добавляем новую карточку
   function handleAddPlaceSubmit(dataCard) {
     setLoading(true);
     api
       .postNewCard(dataCard)
       .then((newCard) => {
-        setCards([newCard, ...isCards]);
+        setCurrentCards([newCard, ...currentCards]);
       })
       .then(() => closeAllPopups())
       .catch((err) => console.log(err))
@@ -115,25 +122,13 @@ function App() {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    if (!isLiked) {
-      api
-        .addLikeCard(card._id)
-        .then((newCard) => {
-          setCards((state) =>
-            state.map((c) => (c._id === card._id ? newCard : c))
-          );
-        })
-        .catch((err) => console.log(err));
-    } else {
-      api
-        .deleteLikeCard(card._id)
-        .then((newCard) => {
-          setCards((state) =>
-            state.map((c) => (c._id === card._id ? newCard : c))
-          );
-        })
-        .catch((err) => console.log(err));
-    }
+    (!isLiked ? api.addLikeCard(card._id) : api.deleteLikeCard(card._id))
+      .then((newCard) => {
+        setCurrentCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch((err) => console.log(err));
   }
 
   // обработчик удаления карточки
@@ -142,7 +137,7 @@ function App() {
     api
       .deleteCard(card._id)
       .then((res) => {
-        setCards((state) => state.filter((c) => c._id !== card._id));
+        setCurrentCards((state) => state.filter((c) => c._id !== card._id));
         console.log(res.message);
       })
       .then(() => closeAllPopups())
@@ -156,7 +151,7 @@ function App() {
         <Header />
 
         <Main
-          isCards={isCards}
+          cards={currentCards}
           onEditAvatar={() => handleEditAvatarClick()}
           onEditProfile={() => handleEditProfileClick()}
           onAddPlace={() => handleAddPlaceClick()}
@@ -189,8 +184,8 @@ function App() {
         />
 
         <ImagePopup
-          {...isSelectedCard}
-          isOpen={isSelectedCard}
+          {...currentCard}
+          isOpen={isImagePopupOpen}
           onClose={closeAllPopups}
         />
 
@@ -199,7 +194,7 @@ function App() {
           onClose={closeAllPopups}
           onCardDelete={(data) => handleCardDeleteSubmit(data)}
           isLoading={isLoading}
-          card={isCard}
+          card={currentCard}
         />
       </div>
     </CurrentUserContext.Provider>
