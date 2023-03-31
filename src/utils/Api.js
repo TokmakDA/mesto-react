@@ -4,7 +4,6 @@ class Api {
     this._headers = options.headers;
   }
 
-  //, ${res.errors.massage}
   _checkResponse = (res) =>
     res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
 
